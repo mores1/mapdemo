@@ -1,0 +1,33 @@
+<h1>地図ページ</h1>
+  <div id="map" style='width: 800px; height: 800px;'></div>
+</div>
+
+<script type="text/javascript">
+var directionsDisplay = new google.maps.DirectionsRenderer();
+var directionsService = new google.maps.DirectionsService();
+
+function calcRoute() {
+  var origin      = new google.maps.LatLng(<%= @point_start.latitude %>,<%= @point_start.longitude %>);
+  var destination = new google.maps.LatLng(<%= @point_goal.latitude %>,<%= @point_goal.longitude %>);
+  var request = {
+      origin:      origin,
+      destination: destination,
+      travelMode:  google.maps.TravelMode.DRIVING
+  };
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+    }
+  });
+}
+
+calcRoute();
+
+    var handler = Gmaps.build('Google');
+handler.buildMap({ provider: {
+  mapTypeId: google.maps.MapTypeId.DRIVING
+  },internal: {id: 'map'}}, function(){
+  directionsDisplay.setMap(handler.getMap());
+    });
+
+</script>
